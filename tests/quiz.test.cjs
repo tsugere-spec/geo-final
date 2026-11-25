@@ -115,6 +115,16 @@ stored = '{"marks":{"1-01":false},"attempts":1,"hits":0,"session":{"ids":["1-01"
 get('resume').onclick();
 assert.equal(state().attempts, 1);
 assert.equal(get('question').textContent, bank.data[0][1]);
+stored = JSON.stringify({
+  marks: { '3-13': true }, attempts: 1, hits: 1,
+  session: { ids: ['3-13'], pos: 0, mode: 'choice', stage: 'question', choiceVersion: 2,
+    options: ['56.7％', '57.7％', '58.7％', '59.7％'] },
+});
+({ get } = open());
+get('resume').onclick();
+assert(state().session.options.includes('機械工業の製品が中心'));
+assert.equal(state().attempts, 1);
+assert.equal(state().marks['3-13'], true);
 stored = '{';
 ({ get } = open());
 assert.equal(get('master').value, 0);
