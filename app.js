@@ -139,8 +139,11 @@ function render(moveFocus = true) {
   get('next').textContent = last ? (repeat ? '間違えた問題でもう一周' : '学習結果を見る') : '次の問題';
   get('choices').replaceChildren();
   if (choice) {
-    if (s.choiceVersion !== 2 || !Array.isArray(s.options)) {
-      s.options = shuffled([answer, first, second, third]);
+    const currentOptions = [answer, first, second, third];
+    if (s.choiceVersion !== 2 || !Array.isArray(s.options) ||
+        s.options.length !== currentOptions.length ||
+        !currentOptions.every(option => s.options.includes(option))) {
+      s.options = shuffled(currentOptions);
       s.choiceVersion = 2;
     }
     for (const option of s.options) {
