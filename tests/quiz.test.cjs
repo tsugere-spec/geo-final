@@ -44,6 +44,9 @@ assert.deepEqual(new Set(Object.keys(bank.choiceBank)), ids);
 for (const [id, prompt, answer, explanation] of bank.data) {
   const [a, b, c, comparison, choicePrompt] = bank.choiceBank[id];
   assert([prompt, answer, explanation, a, b, c, comparison].every(text => text.trim()), id);
+  for (const text of [prompt, explanation, comparison, choicePrompt ?? '']) {
+    assert(!/(?:ワーク|別紙|図を参照|表を参照)/.test(text), `${id} requires external material`);
+  }
   const options = [bank.choiceLabels[id] ?? answer, a, b, c];
   assert.equal(new Set(options).size, 4, id);
   for (const option of options) {
