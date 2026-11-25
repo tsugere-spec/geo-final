@@ -42,9 +42,13 @@ assert.equal(bank.data.length, 110);
 assert.equal(ids.size, 110);
 assert.deepEqual(new Set(Object.keys(bank.choiceBank)), ids);
 for (const [id, prompt, answer, explanation] of bank.data) {
-  const [a, b, c, comparison] = bank.choiceBank[id];
+  const [a, b, c, comparison, choicePrompt] = bank.choiceBank[id];
   assert([prompt, answer, explanation, a, b, c, comparison].every(text => text.trim()), id);
-  assert.equal(new Set([bank.choiceLabels[id] ?? answer, a, b, c]).size, 4, id);
+  const options = [bank.choiceLabels[id] ?? answer, a, b, c];
+  assert.equal(new Set(options).size, 4, id);
+  for (const option of options) {
+    assert(!(choicePrompt ?? prompt).includes(option), `${id} repeats the option "${option}"`);
+  }
 }
 assert.equal(bank.basic.size, 60);
 assert.equal(bank.advanced.size, 48);
